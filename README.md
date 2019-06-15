@@ -25,12 +25,22 @@ The vendor project will help vendors to manage their members
 ```
 remember to change the password in config.json file for development
 
+## create your config file
+> create config.json file into 'server/config/' and add same data as 'example.config.json' 
+remember to change database user, and password
+
 ## add table to database
 
 ```
 > sequelize db:migrate
 ```
 The above command will migrate all table to your database
+
+## start the application
+```
+> npm start
+```
+
 
 ### Contributor
 
