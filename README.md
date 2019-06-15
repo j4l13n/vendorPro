@@ -48,5 +48,5 @@ The above command will migrate all table to your database
 - Samuel Adafia <samuel.adafia@andela.com>
 - Manzi Fabrice Karemera<fabrice.karemera@andela.com>
 - Emile Nsengimana <emile.nsengimana@andela.com>
-- Ndahimana Dominique Xavier <>
+- Ndahimana Dominique Xavier <dominique.ndahimana@andela.com>
 
