@@ -1,6 +1,5 @@
-'use strict';
 export default (sequelize, DataTypes) => {
-  const Vendor = sequelize.define('Vendor', {
+  const Member = sequelize.define('Member', {
     firstname: {
       type: DataTypes.STRING,
       allowNull: {
@@ -20,45 +19,36 @@ export default (sequelize, DataTypes) => {
       allowNull: {
         args: false,
         msg: 'Please enter email'
-      },
-      unique: {
-        args: true,
-        msg: 'Email already exists'
-      },
-      validate: {
-        isEmail: {
-          args: true,
-          msg: 'Please enter a valid email'
-        }
-
       }
     },
-    password: {
+    type: {
       type: DataTypes.STRING,
       allowNull: {
         args: false,
-        msg: 'Please enter password'
-      },
-      validate: {
-        isNotShort: (value) => {
-          if (value.length < 8) {
-            throw new Error('Password should be at least 8 characters');
-          }
-        },
+        msg: 'Please enter vendor type'
       }
     },
-    isadmin: {
+    isactive: {
       type: DataTypes.BOOLEAN,
       allowNull: {
-        args: true,
+        args: true
+      }
+    },
+    owner: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Vendor',
+        key: 'id',
+        as: 'owner'
       }
     }
   }, {});
-  Vendor.associate = function(models) {
+  Member.associate = function(models) {
     // associations can be defined here
-    Vendor.hasMany(models.Member, {
-      foreignKey: 'owner'
+    Member.belongsTo(models.Vendor, {
+      foreignKey: 'owner',
+      onDelete: 'CASCADE'
     })
   };
-  return Vendor;
+  return Member;
 };
