@@ -14,7 +14,9 @@ class Members {
         // Get all members
         return Member
             .findAll()
-            .then(members => res.status(200).send(members))
+            .then(members => res.status(200).send({
+                data: members
+            }));
     }
 }
 

@@ -1,4 +1,3 @@
-'use strict';
 export default (sequelize, DataTypes) => {
   const Vendor = sequelize.define('Vendor', {
     firstname: {

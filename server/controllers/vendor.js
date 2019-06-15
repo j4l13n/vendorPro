@@ -13,6 +13,10 @@ class Vendors {
     static list(req, res) {
         return Vendor
             .findAll()
-            .then(vendors => res.status(200).send(vendors));
+            .then(vendors => res.status(200).send({
+                data: vendors
+            }));
     }
 }
+
+export default Vendors;
