@@ -38,6 +38,11 @@ remember to change database user, and password
 ```
 The above command will migrate all table to your database
 
+> seeder (add default users automatically)
+```
+> sequelize db:seed:all
+```
+
 ## start the application
 ```
 > npm start
