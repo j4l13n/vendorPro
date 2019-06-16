@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 export default (sequelize, DataTypes) => {
   const Vendor = sequelize.define('Vendor', {
     firstname: {
@@ -52,7 +54,19 @@ export default (sequelize, DataTypes) => {
         args: true,
       }
     }
-  }, {});
+  }, {
+    hooks: {
+      beforeCreate: (vendor) => {
+        const salt = bcrypt.genSaltSync();
+        vendor.password = bcrypt.hashSync(vendor.password, salt);
+      }
+    },
+    instanceMethods: {
+      validPassword: function(password) {
+        return bcrypt.compareSync(password, this.password);
+      }
+    }
+  });
   Vendor.associate = function(models) {
     // associations can be defined here
     Vendor.hasMany(models.Member, {
