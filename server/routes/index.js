@@ -14,6 +14,10 @@ router.get('/api', (req, res) => res.status(200).send({
 }));
 router.get('/api/members', Members.list);
 router.get('/api/vendors', Vendors.list);
+<<<<<<< HEAD
 router.post('/api/vendors',validate.signup, Vendors.signup);
+=======
+router.post('/api/vendors', Vendors.signup);
+>>>>>>> 4fa32371fa6b8dbde2c0b3601ab6f838c2d8b25c
 
 export default router;

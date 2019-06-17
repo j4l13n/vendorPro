@@ -29,7 +29,8 @@ class VendorValidations {
         }
         req.vendor = checkVendor.value;
         next();
-    }
+ }
 }
 
-export default VendorValidations;
+const vendorValidation = new VendorValidations();
+export default vendorValidation;
