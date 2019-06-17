@@ -13,5 +13,6 @@ router.get('/api', (req, res) => res.status(200).send({
 }));
 router.get('/api/members', Members.list);
 router.get('/api/vendors', Vendors.list);
+router.post('/api/vendors', Vendors.signup);
 
 export default router;
