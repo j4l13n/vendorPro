@@ -22,7 +22,6 @@ class VendorValidations {
         if (checkVendor.error) {
             const Errors = [];
             for (let i = 0; i < checkVendor.error.details.length; i++){
-            //  res.status(400).json({ status: 400, error: checkVendor.error.details[
             Errors.push(checkVendor.error.details[i].message.replace('"', ' ').replace('"', ' '));
             }
             return res.status(400).json({ status: 400, Errors});
@@ -32,5 +31,4 @@ class VendorValidations {
  }
 }
 
-const vendorValidation = new VendorValidations();
-export default vendorValidation;
+export default  VendorValidations;
