@@ -2,7 +2,7 @@ import express from 'express';
 //import all controllers here
 import Members from '../controllers/member';
 import Vendors from '../controllers/vendor';
-
+import auth from '../middlewares/auth';
 
 //import all middlewares needed here
 
@@ -13,5 +13,6 @@ router.get('/api', (req, res) => res.status(200).send({
 }));
 router.get('/api/members', Members.list);
 router.get('/api/vendors', Vendors.list);
+router.post('/api/login', Vendors.login);
 
 export default router;
