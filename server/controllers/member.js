@@ -18,6 +18,8 @@ class Members {
                 data: members
             }));
     }
+
+    static registerMember(req, res) {}
 }
 
 export default Members;
