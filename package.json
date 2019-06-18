@@ -4,7 +4,7 @@
   "description": "Vendor project",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require babel-register --require babel-polyfill ./server/test/vendor && exit 1",
+    "test": "NODE_ENV=test mocha --require babel-register --require babel-polyfill ./server/test/* && exit 1",
     "start": "nodemon --exec babel-node app.js"
   },
   "repository": {
