@@ -4,7 +4,6 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import router from './server/routes/index'
 
-
 const hostname = '127.0.0.1';
 const port = 3000;
 const app = express() // setup express application
@@ -24,3 +23,5 @@ app.get('*', (req, res) => res.status(200).send({
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+export default app;
