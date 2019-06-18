@@ -6,7 +6,7 @@ class MemberValidations {
         const registerMemberSchema = Joi.object().keys({
             firstname: Joi.string().regex(/^\S+$/).min(3).required().label("First Name :").options({ language: { string: { regex: { base: 'Please remove spaces between word!' } } } }),
             lastname: Joi.string().regex(/^\S+$/).min(3).required().label("Last Name :").options({ language: { string: { regex: { base: 'Please remove spaces between word!' } } } }),
-            type: Joi.string().regex(/^\S+$/).min(3).required().label("Type :").options({ language: { string: { regex: { base: 'Please remove spaces between word!' } } } }),
+            type: Joi.string().regex(/^\S+$/).min(3).required().label("Type :").valid('paying','non-paying').options({ language: { string: { regex: { base: 'Please remove spaces between word!' } } } }),
             email: Joi.string().email().insensitive().required().label("Email :")
         });
         const {

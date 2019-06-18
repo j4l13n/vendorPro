@@ -16,6 +16,6 @@ router.get('/api/members', auth, Members.list);
 router.get('/api/vendors', auth, Vendors.list);
 router.post('/api/login', Validate.checkLoginData, Vendors.login);
 router.post('/api/vendors', Validate.signup, Vendors.signup);
-router.post('/api/vendors/:vendorId/members',auth, MemberValidations.registerMember, Members.registerMember);
+router.post('/api/vendors/members',auth, MemberValidations.registerMember, Members.registerMember);
 
 export default router;
