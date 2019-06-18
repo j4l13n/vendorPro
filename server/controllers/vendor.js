@@ -21,12 +21,51 @@ class Vendors {
                 data: vendors
             }));
     }
+    // vendor sign up --------------------------------------------------------------------------
+    static signup(req, res) {
+
+        const vendorData = {
+            firstname: req.vendor.firstname,
+            lastname: req.vendor.lastname,
+            email: req.vendor.email.toLowerCase(),
+            password: req.vendor.password,
+            isadmin: false
+        };
+        Vendor.findOne({
+            where: {
+                email: req.vendor.email,
+            }
+        })
+            .then(vendor => {
+                if (!vendor) {
+                    Vendor.create(vendorData)
+                        .then(vendor => {
+                            return res.status(201).json({
+                                status: 201,
+                                data: vendorData
+                            })
+                        })
+                        .catch(err => {
+                            res.status(400).send('error' + err);
+                        })
+                }
+                else {
+                    res.status(409).json({ status: 409, error: 'user already exist' })
+
+                }
+            })
+            .catch(err => {
+                res.status(400).send('error' + err);
+                console.log(err)
+            })
+
+    }
 
     // vendor sign in --------------------------------------------------------------------------
     static async login(req, res) {
         try {
             const findVendor = await Vendor.findOne({
-                where: { "email": req.body.email }
+                where: { "email": req.vendor.email }
             });
 
             if (findVendor) {
@@ -34,7 +73,7 @@ class Vendors {
                 const vendorData = {
                     id, firstname, lastname, email, isadmin
                 };
-                if (req.body.password === password) {
+                if (req.vendor.password === password) {
                     const token = jwt.sign(vendorData, process.env.SECRET_KEY);
                     return res.status(200).json({
                         status: 200,
@@ -59,7 +98,6 @@ class Vendors {
                 error: 'internal server error! please try again later'
             });
         }
-
     }
 }
 
