@@ -2,6 +2,13 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
+/**
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ * @return next if token passed
+ */
 const verifyToken = (req, res, next) => {
     const head = req.headers.token;
     jwt.verify(head, process.env.SECRET_KEY, (err, crypt) => {
@@ -13,6 +20,6 @@ const verifyToken = (req, res, next) => {
         }
         req.user = crypt;
         next();
-    })
+    });
 };
 export default verifyToken;

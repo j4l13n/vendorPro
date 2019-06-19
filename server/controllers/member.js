@@ -10,16 +10,21 @@ class Members {
      * @param {Object} res 
      * return all members
      */
-    static list(req, res) {
-        // Get all members
-        return Member
+    static async list(req, res) {
+        return await Member
             .findAll()
             .then(members => res.status(200).send({
                 data: members
             }));
     }
 
-    static registerMember(req, res) {
+    /**
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @returns an object when member is registered
+     */
+    static async registerMember(req, res) {
         const memberData = {
             firstname: req.member.firstname,
             lastname: req.member.lastname,
@@ -36,7 +41,7 @@ class Members {
         })
         .then(member => {
             if (member) {
-                res.status(409).json({ error: 'Member already recorded!' })
+                res.status(409).json({ error: 'Member already recorded!' });
             }
             else{
                 Member.create(memberData)
@@ -44,13 +49,13 @@ class Members {
                     return res.status(201).json({
                         message:"Member Created successfully",
                         data: memberData
-                    })
+                    });
                 })
                 .catch(err => {
                     res.status(400).send('error' + err);
-                })
+                });
             }
-        })
+        });
     }
 }
 

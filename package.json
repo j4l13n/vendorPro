@@ -4,7 +4,7 @@
   "description": "Vendor project",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha --require babel-register --require babel-polyfill ./server/test/* && exit 1",
+    "test": "NODE_ENV=test mocha --require babel-register --require babel-polyfill ./server/test/*.js && exit 1",
     "start": "nodemon --exec babel-node app.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/j4l13n/vendorPro#readme",
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
+    "eslint": "^5.16.0",
     "nodemon": "^1.19.1"
   },
   "dependencies": {
