@@ -57,6 +57,41 @@ class Members {
             }
         });
     }
+
+    /**
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @returns an object after update
+     */
+    static updateMember(req, res) {
+        const { firstname, lastname, email, type, isactive } = req.body;
+        Member
+            .findOne({ where: {id: req.params.memberId} })
+            .then((member) => {
+            member.update({
+                firstname: firstname || member.firstname,
+                lastname: lastname || member.lastname,
+                email: email || member.email,
+                type: type || member.type,
+                isactive: isactive || member.isactive
+            })
+                .then((updatedMember) => {
+                    return res.status(200).json({
+                    message: `Member with id ${req.params.memberId} was updated successfully`,
+                    data: {
+                        firstname: firstname || updatedMember.firstname,
+                        lastname: lastname || updatedMember.lastname,
+                        email: email || updatedMember.email,
+                        type: type || updatedMember.type,
+                        isactive: isactive || updatedMember.isactive
+                    }
+                    });
+                })
+                .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
+    }
 }
 
 export default Members;
