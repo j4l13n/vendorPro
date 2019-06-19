@@ -1,12 +1,49 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../app';
+import { getMaxListeners } from 'cluster';
+import expect from 'expect.js';
 
 chai.use(chaiHttp);
 chai.should();
 
 // vendor signin tests -----------------------------------------------------
 describe('Vendor tests', () => {
+      it('should be able to signup', (done) => {
+        const vendor = {
+            "firstname": "Eleman",
+            "lastname": "huhu",
+            "email": "manzif57@gmail.com",
+            "password": "Password12",
+        }
+          chai.request(server)
+        .post('/api/vendors/')
+        .send(vendor)
+        .end((err, res) => {
+            res.status.should.be.eql(201);
+            res.body.should.be.a('object');
+            res.body.should.have.property('data');  
+            res.body.data.should.have.property('firstname'); 
+            res.body.data.should.have.property('lastname');  
+            res.body.data.should.have.property('email');       
+        })
+          done()
+      });
+      it('should not be able to signup without one of the required properties', (done) => {
+        const vendor = {
+            "firstname": "",
+            "lastname": "huhu",
+            "email": "manzif57@gmail.com",
+            "password": "Password12",
+        }
+          chai.request(server)
+         .post('/api/vendors/')
+         .send(vendor)
+         .end((err, res) => {
+             res.body.Errors.should.be.a('array');
+         })
+          done()
+      });
     it('should be able to signin', (done) => {
       const vendor = {
         "email": "manzi.samuel@andela.com",
@@ -16,7 +53,7 @@ describe('Vendor tests', () => {
        .post('/api/login/')
        .send(vendor)
        .end((err, res) => {
-           res.body.status.should.be.eql(200);
+           res.status.should.be.eql(200);
            
        })
         done()
