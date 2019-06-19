@@ -31,7 +31,7 @@ class VendorValidations {
         next();
     }
 
-    //  validation for signin ----------------------------------------
+    //  validation for signin
     static checkLoginData(req, res, next) {
         const loginSchema = Joi.object().keys({
             email: Joi.string().email().insensitive().required(),

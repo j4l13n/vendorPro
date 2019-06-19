@@ -33,6 +33,6 @@ module.exports = {
     */
    queryInterface.bulkDelete('Vendors', [{
       firstname :'Samuel'
-    }])
+    }]);
   }
 };

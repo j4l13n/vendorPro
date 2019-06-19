@@ -48,7 +48,7 @@ export default (sequelize, DataTypes) => {
     Member.belongsTo(models.Vendor, {
       foreignKey: 'owner',
       onDelete: 'CASCADE'
-    })
+    });
   };
   return Member;
 };
