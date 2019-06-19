@@ -5,6 +5,7 @@ import Vendors from '../controllers/vendor';
 import auth from '../middlewares/auth';
 import Validate from '../middlewares/vendor';
 import MemberValidations from '../middlewares/member';
+import VendorAuth from '../middlewares/modifyAuth';
 
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.get('/api/vendors', auth, Vendors.list);
 router.post('/api/login', Validate.checkLoginData, Vendors.login);
 router.post('/api/vendors', Validate.signup, Vendors.signup);
 router.post('/api/vendors/members',auth, MemberValidations.registerMember, Members.registerMember);
+router.patch('/api/members/:memberId', auth, VendorAuth.isOwner, MemberValidations.updateMember, Members.updateMember);
 
 export default router;

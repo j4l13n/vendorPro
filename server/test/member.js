@@ -14,6 +14,12 @@ chai.should();
 
 const { Member } = model;
 
+const vendorToken = jwt.sign({
+    firstname: 'Samuel', 
+    lastname: 'Manzi', 
+    email: 'adafiamanzi.samuel@andela.com', 
+    isadmin: true }, process.env.SECRET_KEY);
+
 describe('Member tests', () => {
     before(()=>{
         const memberEmail = {
@@ -118,5 +124,29 @@ describe('Member tests', () => {
             done();
          });
           
+    });
+});
+
+describe('Member tests', () => {
+    it('should be able to update a member', (done) => {
+      const member = {
+        firstname: 'David',
+        lastname: 'Mantey',
+        email: 'mantey@gmail.com',
+        type: 'paying'
+      };
+        chai.request(server)
+       .patch('/api/members/1')
+       .set('token', `${vendorToken}`)
+       .send(member)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(200);
+            expect(res.body.message).to.be.a('string');
+            // expect(res.body.firstname).to.deep.equal('David');
+            // expect(res.body.email).to.deep.equal('mantey@gmail.com');
+            done();
+       });
+        
     });
 });
