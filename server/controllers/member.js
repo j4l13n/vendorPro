@@ -24,7 +24,7 @@ class Members {
      * @param {Object} res 
      * @returns an object when member is registered
      */
-    static async registerMember(req, res) {
+    static registerMember(req, res) {
         const memberData = {
             firstname: req.member.firstname,
             lastname: req.member.lastname,
