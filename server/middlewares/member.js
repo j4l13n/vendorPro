@@ -75,20 +75,39 @@ class MemberValidations {
             email: Joi.string().email().insensitive().label("Email :"),
             isactive: Joi.boolean()
         });
-        const { firstname, lastname, type, email, isactive } = req.body;
-        const member = { firstname, lastname, type, email, isactive };
+
+        const member = { 
+            firstname: req.body.firstname, 
+            lastname: req.body.lastname, 
+            type: req.body.type, 
+            email: req.body.email, 
+            isactive: req.body.isactive, 
+        };
         const checkMember = Joi.validate(member, updateMemberSchema, {
             abortEarly: false
         });
-
         if (checkMember.error) {
             const Errors = [];
             for (let i = 0; i < checkMember.error.details.length; i++) {
                 Errors.push(checkMember.error.details[i].message.replace('"', ' ').replace('"', ' '));
             }
-            return res.status(400).json({ status: 400, Errors });
+            return res.status(400).json({ status: 400, message: Errors[0] });
         }
-        req.member = checkMember.value;
+        next();
+    }
+
+    static async urlMember(req, res, next) {
+        const urlSchema = Joi.object().keys({
+            memberId: Joi.number().positive().required()
+        });
+        const memberData = {
+            memberId: req.params.memberId
+        };
+        const checkUrl = Joi.validate(memberData, urlSchema);
+
+        if(checkUrl.error){
+            return res.status(400).json({message: checkUrl.error.details[0].message.replace('"', ' ').replace('"', ' ')});
+        }
         next();
     }
 }

@@ -14,11 +14,8 @@ chai.should();
 
 const { Member } = model;
 
-const vendorToken = jwt.sign({
-    firstname: 'Samuel', 
-    lastname: 'Manzi', 
-    email: 'adafiamanzi.samuel@andela.com', 
-    isadmin: true }, process.env.SECRET_KEY);
+const venderInfo = {id: 1, firstname: 'Samuel', lastname: 'Manzi', email: 'adafiamanzi.samuel@andela.com', isadmin: true };
+const vendorToken = jwt.sign(venderInfo, process.env.SECRET_KEY);
 
 describe('Member tests', () => {
     before(()=>{
@@ -128,25 +125,166 @@ describe('Member tests', () => {
 });
 
 describe('Member tests', () => {
-    it('should be able to update a member', (done) => {
-      const member = {
-        firstname: 'David',
-        lastname: 'Mantey',
-        email: 'mantey@gmail.com',
-        type: 'paying'
-      };
+    before('A member should be created before updating test is run',(done)=> {
+        const memberData = {
+            firstname:'Kwame',
+            lastname:'Junior',
+            email:'junior@gmail.com',
+            type:'non-paying',
+            owner: venderInfo.id,
+        };
         chai.request(server)
-       .patch('/api/members/1')
+         .post('/api/vendors/members')
+         .set('token', vendorToken)
+         .send(memberData)
+         .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            done();
+         });
+    });
+    it('should be able to update a member', async () => {
+        const memberOwner = await Member.findOne({ where: { email: 'junior@gmail.com'}});
+        const member = {
+            firstname:'Qwame',
+            lastname:'Junior',
+            email:'junior@gmail.com',
+            type: 'paying'
+        };
+        chai.request(server)
+       .patch(`/api/members/${memberOwner.dataValues.id}`)
        .set('token', `${vendorToken}`)
        .send(member)
        .end((err, res) => {
             expect(res.body).to.be.an('object');
             expect(res.status).to.deep.equal(200);
-            expect(res.body.message).to.be.a('string');
-            // expect(res.body.firstname).to.deep.equal('David');
-            // expect(res.body.email).to.deep.equal('mantey@gmail.com');
+            expect(res.body.message).to.deep.equal(`Member with id ${memberOwner.dataValues.id} was updated successfully`);
+            expect(res.body.data.email).to.deep.equal(member.email);
+       });
+    });
+    it('should not update a member if the email is invalid', async () => {
+        const memberOwner = await Member.findOne({ where: { email: 'junior@gmail.com'}});
+        const member = {
+            firstname:'Qwame',
+            lastname:'Junior',
+            email:'juniorgmail.com',
+            type: 'paying'
+        };
+        chai.request(server)
+       .patch(`/api/members/${memberOwner.dataValues.id}`)
+       .set('token', `${vendorToken}`)
+       .send(member)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(400);
+            expect(res.body.message).to.deep.equal(' Email :  must be a valid email');
+       });
+    });
+    it('should not update a member if the id provided does not exist', (done) => {
+        const member = {
+            firstname:'Qwame',
+            lastname:'Junior',
+            email:'junior@gmail.com',
+            type: 'paying'
+        };
+        chai.request(server)
+       .patch('/api/members/1000')
+       .set('token', `${vendorToken}`)
+       .send(member)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(404);
+            expect(res.body.message).to.deep.equal('Member was not found');
             done();
        });
-        
+    });
+
+    it('should not update a member if the id provided is not a positive number', (done) => {
+        const member = {
+            firstname:'Qwame',
+            lastname:'Junior',
+            email:'junior@gmail.com',
+            type: 'paying'
+        };
+        chai.request(server)
+       .patch('/api/members/-1')
+       .set('token', `${vendorToken}`)
+       .send(member)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(400);
+            expect(res.body.message).to.deep.equal(' memberId  must be a positive number');
+            done();
+       });
+    });
+
+    it('should not update a member if the id provided is a string', (done) => {
+        const member = {
+            firstname:'Qwame',
+            lastname:'Junior',
+            email:'junior@gmail.com',
+            type: 'paying'
+        };
+        chai.request(server)
+       .patch('/api/members/hjgh')
+       .set('token', `${vendorToken}`)
+       .send(member)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(400);
+            expect(res.body.message).to.deep.equal(' memberId  must be a number');
+            done();
+       });
+    });
+
+    it('should not to delete a member if the member id does not exist', (done) => {
+        chai.request(server)
+       .delete('/api/members/1000')
+       .set('token', `${vendorToken}`)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(404);
+            expect(res.body.message).to.deep.equal(`Member was not found`);
+            done();
+       });
+
+    });
+
+    it('should not to delete a member if the member id is not positive', (done) => {
+        chai.request(server)
+       .delete('/api/members/-1')
+       .set('token', `${vendorToken}`)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(400);
+            expect(res.body.message).to.deep.equal(' memberId  must be a positive number');
+            done();
+       });
+
+    });
+
+    it('should not to delete a member if the member id is a string', (done) => {
+        chai.request(server)
+       .delete('/api/members/string')
+       .set('token', `${vendorToken}`)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(400);
+            expect(res.body.message).to.deep.equal(' memberId  must be a number');
+            done();
+       });
+
+    });
+
+    it('should be able to delete a member', async () => {
+        const memberOwner = await Member.findOne({ where: { email: 'junior@gmail.com'}});
+        chai.request(server)
+       .delete(`/api/members/${memberOwner.dataValues.id}`)
+       .set('token', `${vendorToken}`)
+       .end((err, res) => {
+            expect(res.body).to.be.an('object');
+            expect(res.status).to.deep.equal(200);
+            expect(res.body.message).to.deep.equal(`Member with id ${memberOwner.dataValues.id} was successfully deleted`);
+       });
+
     });
 });
