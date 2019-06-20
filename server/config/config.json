@@ -1,7 +1,7 @@
 {
     "development": {
-        "username": "your_database_username",
-        "password": "your_database_password",
+        "username": "root",
+        "password": "regedit56",
         "database": "vendordb",
         "host": "127.0.0.1",
         "dialect": "postgres"
