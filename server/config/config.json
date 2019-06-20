@@ -1,0 +1,23 @@
+{
+  "development": {
+      "username": "root",
+      "password": "regedit56",
+      "database": "vendordb",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+  },
+  "test": {
+      "username": "wuehuqtd",
+      "password": "Ge99yfp5tD5E5k-1oZipyDhRvlndos4b",
+      "database": "wuehuqtd",
+      "host": "raja.db.elephantsql.com",
+      "dialect": "postgres"
+  },
+  "production": {
+      "username": "root",
+      "password": null,
+      "database": "database_production",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+  }
+ }
