@@ -31,7 +31,7 @@ class Members {
             email: req.member.email.toLowerCase(),
             type: req.member.type,
             isactive: true,
-            owner:req.user.id
+            owner: req.user.id
         };
 
         Member.findOne({
@@ -39,23 +39,23 @@ class Members {
                 email: req.member.email,
             }
         })
-        .then(member => {
-            if (member) {
-                res.status(409).json({ error: 'Member already recorded!' });
-            }
-            else{
-                Member.create(memberData)
-                .then(member => {
-                    return res.status(201).json({
-                        message:"Member Created successfully",
-                        data: memberData
-                    });
-                })
-                .catch(err => {
-                    res.status(400).send('error' + err);
-                });
-            }
-        });
+            .then(member => {
+                if (member) {
+                    res.status(409).json({ error: 'Member already recorded!' });
+                }
+                else {
+                    Member.create(memberData)
+                        .then(member => {
+                            return res.status(201).json({
+                                message: "Member Created successfully",
+                                data: memberData
+                            });
+                        })
+                        .catch(err => {
+                            res.status(400).send('error' + err);
+                        });
+                }
+            });
     }
 
     /**
@@ -67,30 +67,38 @@ class Members {
     static updateMember(req, res) {
         const { firstname, lastname, email, type, isactive } = req.body;
         Member
-            .findOne({ where: {id: req.params.memberId} })
+            .findOne({ where: { id: req.params.memberId } })
             .then((member) => {
-            member.update({
-                firstname: firstname || member.firstname,
-                lastname: lastname || member.lastname,
-                email: email || member.email,
-                type: type || member.type,
-                isactive: isactive || member.isactive
-            })
-                .then((updatedMember) => {
-                    return res.status(200).json({
-                    message: `Member with id ${req.params.memberId} was updated successfully`,
-                    data: {
-                        firstname: firstname || updatedMember.firstname,
-                        lastname: lastname || updatedMember.lastname,
-                        email: email || updatedMember.email,
-                        type: type || updatedMember.type,
-                        isactive: isactive || updatedMember.isactive
-                    }
-                    });
+                member.update({
+                    firstname: firstname || member.firstname,
+                    lastname: lastname || member.lastname,
+                    email: email || member.email,
+                    type: type || member.type,
+                    isactive: isactive || member.isactive
                 })
-                .catch(error => res.status(400).send(error));
+                    .then((updatedMember) => {
+                        return res.status(200).json({
+                            message: `Member with id ${req.params.memberId} was updated successfully`,
+                            data: {
+                                firstname: firstname || updatedMember.firstname,
+                                lastname: lastname || updatedMember.lastname,
+                                email: email || updatedMember.email,
+                                type: type || updatedMember.type,
+                                isactive: isactive || updatedMember.isactive
+                            }
+                        });
+                    })
+                    .catch(error => res.status(400).send(error));
             })
             .catch(error => res.status(400).send(error));
+    }
+
+    static async deleteMember(req, res) {
+        const member = await Member.findByPk(req.params.memberId);
+        member.destroy();
+            return res.status(200).json({
+                message: `Member with id ${req.params.memberId} was successfully deleted`
+            });
     }
 }
 

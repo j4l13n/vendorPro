@@ -18,6 +18,7 @@ router.get('/api/vendors', auth, Vendors.list);
 router.post('/api/login', Validate.checkLoginData, Vendors.login);
 router.post('/api/vendors', Validate.signup, Vendors.signup);
 router.post('/api/vendors/members',auth, MemberValidations.registerMember, Members.registerMember);
-router.patch('/api/members/:memberId', auth, VendorAuth.isOwner, MemberValidations.updateMember, Members.updateMember);
+router.patch('/api/members/:memberId', MemberValidations.urlMember, auth, VendorAuth.isOwner, MemberValidations.updateMember, Members.updateMember);
+router.delete('/api/members/:memberId', MemberValidations.urlMember, auth, VendorAuth.isOwner, Members.deleteMember);
 
 export default router;
